@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.mariah.forum.controller.dto.DetalhesTopicoDto;
 import br.com.mariah.forum.controller.dto.TopicoDto;
+import br.com.mariah.forum.controller.form.AtualizacaoTopicoForm;
 import br.com.mariah.forum.controller.form.TopicoForm;
 import br.com.mariah.forum.modelo.Topico;
 import br.com.mariah.forum.repository.CursoRepository;
@@ -55,9 +58,14 @@ public class TopicosController {
 	@GetMapping("/{id}")
 	public DetalhesTopicoDto detalhar(@PathVariable(name = "id") Long id) {
 		Optional<Topico> optTopico = this.topicoRepository.findById(id);
-			return optTopico.isPresent()? new DetalhesTopicoDto(optTopico.get()) : null;
-	 
-		
+		return optTopico.isPresent() ? new DetalhesTopicoDto(optTopico.get()) : null;
+	}
+	
+	@PutMapping("/{id}")
+	@Transactional
+	public ResponseEntity<TopicoDto> atualizar(@PathVariable Long id, @RequestBody @Valid AtualizacaoTopicoForm form ){
+		Topico topico = form.atualizar(id, topicoRepository);
+		return ResponseEntity.ok(new TopicoDto(topico));
 	}
 }
 
