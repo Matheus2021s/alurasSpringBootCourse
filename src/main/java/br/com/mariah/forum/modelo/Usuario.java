@@ -107,6 +107,14 @@ public class Usuario implements UserDetails {
 		return this.email;
 	}
 
+	public List<Perfil> getPerfis() {
+		return perfis;
+	}
+
+	public void setPerfis(List<Perfil> perfis) {
+		this.perfis = perfis;
+	}
+
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;

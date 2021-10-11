@@ -15,12 +15,19 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import br.com.mariah.forum.repository.UsuarioRepository;
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AutenticacaoService autenticacaoService;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private TokenService tokenService;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -45,7 +52,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		 .and().csrf().disable()
 		 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		 .and()
-		 .addFilterBefore(new AutenticacaoViaTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+		 .addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 	}
 	 @Override
 	public void configure(WebSecurity web) throws Exception {
