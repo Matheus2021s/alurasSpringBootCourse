@@ -55,6 +55,7 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		 .and()
 		 .addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 	}
+	 
 	private static final String[] AUTH_WHITELIST = {
 	        "/swagger-resources/**",
 	        "/swagger-ui.html",
