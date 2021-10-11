@@ -55,9 +55,15 @@ public class SecurityConfigurations extends WebSecurityConfigurerAdapter {
 		 .and()
 		 .addFilterBefore(new AutenticacaoViaTokenFilter(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 	}
-	 @Override
-	public void configure(WebSecurity web) throws Exception {
-		
-	}
+	private static final String[] AUTH_WHITELIST = {
+	        "/swagger-resources/**",
+	        "/swagger-ui.html",
+	        "/v2/api-docs",
+	        "/webjars/**"
+	};
 
+	@Override
+	public void configure(WebSecurity web) throws Exception {
+	    web.ignoring().antMatchers(AUTH_WHITELIST);
+	}
 }
